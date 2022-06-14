@@ -1,0 +1,15 @@
+SELECT inspections_type as inspections_type_high_risk_Presentage, (counter*100/sum_counter)
+FROM
+(
+SELECT inspections_type , SUM(counter) as sum_counter , counter 
+FROM(
+SELECT i.type as inspections_type ,v.risk_category as violations_risk_category
+,count(*) as counter
+FROM inspections i
+JOIN violations v
+ON i.business_id = v.business_id
+GROUP BY 2,1
+ORDER BY 1
+)t1
+GROUP BY 1
+)
